@@ -65,3 +65,89 @@ ControllerListener.startListener = function startListener() {
         });
     });
 }
+
+//添加 监听
+ControllerListener.addListener = function addListener(req,res) {
+    if(req.body.contract){
+        let addcontract = req.body.contract;
+        var contracts = JSON.parse(rf.readFileSync("contracts.json","utf-8"));
+        contracts.push(addcontract);
+        rf.writeFileSync("contracts.json",JSON.stringify(contracts));
+        addContractListener(addcontract).then(data=>{
+            res.status(200);
+            res.json(data);
+        });
+    }else{
+        res.status(200);
+        res.json({
+            isSuccess:false,
+            message:"缺少合约参数"
+          });
+    }
+};
+
+function addContractListener(contract){
+    return new Promise((resolve, reject) => {
+        var MyContract = rpcWeb3.eth.contract(util.abi);
+        var myContractInstance = MyContract.at(contract);
+        var someone = myContractInstance.transferEvent();
+        someone.watch(function(error, transactiondate){
+            if(error){
+                resolve({
+                    isSuccess:false,
+                    contract:contract,
+                    message:error
+                });
+                console.error(error);
+                return;
+            }
+            // { logIndex: 0,
+            //     transactionIndex: 0,
+            //     transactionHash: '0x22c9927e2226505ce955569825feb1fc33a6b04771eceebf6b7575cd781371a6',
+            //     blockHash: '0x0f6d415a3167dbff131a842a4e4f9132ca0863c8263ce07076973a5fd9651270',
+            //     blockNumber: 6,
+            //     address: '0xf25186b5081ff5ce73482ad761db0eb0d25abfbf',
+            //     type: 'mined',
+            //     event: 'transferEvent',
+            //     args: 
+            //      { fundingGoal: BigNumber { s: 1, e: 20, c: [Array] },
+            //        amountRaised: BigNumber { s: 1, e: 19, c: [Array] },
+            //        fromAddress: '0xc5fdf4076b8f3a5357c5e395ab970b5b54098fef',
+            //        amount: BigNumber { s: 1, e: 18, c: [Array] } } }
+            if(transactiondate.args){
+                // console.log(transactiondate.args);
+                return new Promise((resolve, reject) => {
+                    var parm = transactiondate.args;
+                    parm.contract = contract;
+                    let write = parm;
+                    let option = Object.assign({}, CONFIG.Api.uploadProgress);
+                    option.headers= {
+                        'Content-Type': 'application/json',
+                        'Content-Length': Buffer.byteLength(JSON.stringify(write))
+                    };
+                    var req = http.request(option, (res) =>{
+                            var data = "";
+                            res.setEncoding("utf8");
+                            res.on("data", (chunk) => {
+                                data += chunk;
+                            });
+                            res.on("end", () => {
+                                resolve(data);
+                            });
+                    });
+                    req.on('error', (e) => {
+                        resolve("上传失败:"+JSON.stringify(write));
+                    });
+                    req.write(JSON.stringify(write));
+                    req.end();
+                }).then((data)=>{
+                    console.log(data);
+                });
+            }
+        });
+        resolve({
+            isSuccess:false,
+            message:'添加成功'
+        });
+    });
+}

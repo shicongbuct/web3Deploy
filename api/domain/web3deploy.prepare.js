@@ -16,10 +16,10 @@ const CONFIG = {
     },
     Api:{
         uploadProgress:{
-            port:10662,
-            hostname:"192.168.1.10",
+            port:8101,
+            hostname:"192.168.1.211",
             method:"POST",
-            path:"/geth/can/wallect/eth/import/keystory",
+            path:"/hkico/project/pay",
             timeout: 300000
         }
     }

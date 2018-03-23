@@ -24,7 +24,6 @@ Web3deployModel.web3deploy  = function web3deploy(body){
 
         var crowdsaleContract = rpcWeb3.eth.contract(util.abi);
 
-
         var crowdsale = crowdsaleContract.new(
               ifSuccessfulSendTo,
               fundingGoalInEthers,
@@ -38,15 +37,15 @@ Web3deployModel.web3deploy  = function web3deploy(body){
           }, function (e, contract){
             if(e){
               resolve({
-                ifSuccess:false,
+                isSuccess:false,
                 message:e
               });
             }
-            console.log(e, contract);
+            // console.log(e, contract);
             if (typeof contract.address !== 'undefined') {
                 console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
                 resolve({
-                  ifSuccess:true,
+                  isSuccess:true,
                   message:contract.address
                 });
             }
