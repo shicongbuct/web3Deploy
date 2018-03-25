@@ -70,10 +70,7 @@ ControllerListener.startListener = function startListener() {
 ControllerListener.addListener = function addListener(req,res) {
     if(req.body.contract){
         let addcontract = req.body.contract;
-        var contracts = JSON.parse(rf.readFileSync("contracts.json","utf-8"));
-        contracts.push(addcontract);
-        rf.writeFileSync("contracts.json",JSON.stringify(contracts));
-        addContractListener(addcontract).then(data=>{
+        ControllerListener.addContractListener(addcontract).then(data=>{
             res.status(200);
             res.json(data);
         });
@@ -86,8 +83,11 @@ ControllerListener.addListener = function addListener(req,res) {
     }
 };
 
-function addContractListener(contract){
+ControllerListener.addContractListener  = function addContractListener(contract){
     return new Promise((resolve, reject) => {
+        var contracts = JSON.parse(rf.readFileSync("contracts.json","utf-8"));
+        contracts.push(contract);
+        rf.writeFileSync("contracts.json",JSON.stringify(contracts));
         var MyContract = rpcWeb3.eth.contract(util.abi);
         var myContractInstance = MyContract.at(contract);
         var someone = myContractInstance.transferEvent();
@@ -146,7 +146,7 @@ function addContractListener(contract){
             }
         });
         resolve({
-            isSuccess:false,
+            isSuccess:true,
             message:'添加成功'
         });
     });
