@@ -33,7 +33,7 @@ ControllerListener.startListener = function startListener() {
             //        fromAddress: '0xc5fdf4076b8f3a5357c5e395ab970b5b54098fef',
             //        amount: BigNumber { s: 1, e: 18, c: [Array] } } }
             if(transactiondate.args){
-                // console.log(transactiondate.args);
+                console.log(transactiondate.args);
                 return new Promise((resolve, reject) => {
                     var parm = transactiondate.args;
                     parm.contract = contract;

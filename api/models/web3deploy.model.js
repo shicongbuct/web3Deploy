@@ -43,8 +43,8 @@ Web3deployModel.web3deploy  = function web3deploy(body){
                 message:e
               });
             }
-            // console.log(e, contract);
-            if (typeof contract.address !== 'undefined') {
+            console.log(contract);
+            if (contract.address && typeof contract.address !== 'undefined') {
                 console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
 
                 return listenerController.addContractListener(contract.address).then(data=>{
@@ -58,7 +58,11 @@ Web3deployModel.web3deploy  = function web3deploy(body){
                       message:contract.address
                     });
                 });
-               
+            }else{
+              resolve({
+                isSuccess:false,
+                message:"合约生成失败"
+              });
             }
         })
     });
