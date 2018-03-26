@@ -9,6 +9,7 @@ ControllerWeb3deploy.web3deploy = function web3deploy(req, res) {
         res.status(200);
         res.json(data);
     }).catch((error) => {
+        console.error(error);
         res.status(500);
         res.json(error);
     });
