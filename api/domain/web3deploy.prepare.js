@@ -17,9 +17,16 @@ const CONFIG = {
     Api:{
         uploadProgress:{
             port:8101,
-            hostname:"192.168.1.211",
+            hostname:"192.168.1.210",
             method:"POST",
             path:"/hkico/project/pay",
+            timeout: 300000
+        },
+        createProject:{
+            port:8101,
+            hostname:"192.168.1.210",
+            method:"POST",
+            path:"/hkico/project/buildContract",
             timeout: 300000
         }
     }

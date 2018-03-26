@@ -2,6 +2,7 @@
 
 const CONFIG = require('../domain/web3deploy.prepare').CONFIG;
 const Web3 = require("web3");
+const http = require("http");
 const listenerController = require("../controllers/listener_controller");
 const util = require('../models/util')
 var rpcWeb3 = new Web3(new Web3.providers.HttpProvider(CONFIG.ethereum.rpc));
@@ -51,13 +52,24 @@ Web3deployModel.web3deploy  = function web3deploy(body){
                   return listenerController.addContractListener(contract.address).then(data=>{
                       if(data.isSuccess){
                         console.log(contract.address+"自动监听");
+                        let data = {
+                          isSuccess:true,
+                          ifSuccessfulSendTo:ifSuccessfulSendTo,
+                          fundingGoalInEthers:fundingGoalInEthers,
+                          durationInMinutes:durationInMinutes,
+                          finneyCostOfEachToken:finneyCostOfEachToken,
+                          addressOfTokenUsedAsReward:addressOfTokenUsedAsReward,
+                          contract:contract.address,
+                          projectId:body.projectId
+                        };
+                        return sendToServer(data);
                       }else{
                         console.error(contract.address+"未能自动监听error");
+                        resolve({
+                          isSuccess:false,
+                          message:contract.address+"未能自动监听error"
+                        });
                       }
-                      resolve({
-                        isSuccess:true,
-                        message:contract.address
-                      });
                   });
               }else{
                 resolve({
@@ -73,5 +85,41 @@ Web3deployModel.web3deploy  = function web3deploy(body){
             message:"合约生成失败"
           });
         }
+    });
+};
+
+function sendToServer(parm){
+    return new Promise((resolve, reject) => {
+      let write = parm;
+      let option = Object.assign({}, CONFIG.Api.createProject);
+      option.headers= {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(JSON.stringify(write))
+      };
+      var req = http.request(option, (res) =>{
+              var data = "";
+              res.setEncoding("utf8");
+              res.on("data", (chunk) => {
+                  data += chunk;
+              });
+              res.on("end", () => {
+                console.log("上传创建项目成功"+JSON.stringify(write));
+                  resolve({
+                    isSuccess:true,
+                    message:data
+                  });
+              });
+      });
+      req.on('error', (e) => {
+          console.log("上传创建项目失败:"+JSON.stringify(write));
+          resolve({
+            isSuccess:false,
+            message:JSON.stringify(write)
+          });
+      });
+      req.write(JSON.stringify(write));
+      req.end();
+    }).then((data)=>{
+      console.log(data);
     });
 };
