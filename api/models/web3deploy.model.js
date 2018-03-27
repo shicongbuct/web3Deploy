@@ -12,12 +12,13 @@ var  Web3deployModel = module.exports;
 Web3deployModel.web3deploy  = function web3deploy(body){
     return new Promise((resolve,reject)=>{
         if(!body.ifSuccessfulSendTo || !body.fundingGoalInEthers || 
-              !body.durationInMinutes || !body.finneyCostOfEachToken || !body.addressOfTokenUsedAsReward){
+              !body.durationInMinutes || !body.finneyCostOfEachToken || !body.addressOfTokenUsedAsReward || !body.projectId){
                 resolve({
                   isSuccess:false,
                   message:"参数不对"
                 });
         }
+        var projectId = body.projectId;
         var ifSuccessfulSendTo = body.ifSuccessfulSendTo/* var of type address here */ ;
         var fundingGoalInEthers = body.fundingGoalInEthers/* var of type uint256 here */ ;
         var durationInMinutes = body.durationInMinutes/* var of type uint256 here */ ;
@@ -60,7 +61,7 @@ Web3deployModel.web3deploy  = function web3deploy(body){
                           finneyCostOfEachToken:finneyCostOfEachToken,
                           addressOfTokenUsedAsReward:addressOfTokenUsedAsReward,
                           contract:contract.address,
-                          projectId:body.projectId
+                          projectId:projectId
                         };
                         return sendToServer(data);
                       }else{
