@@ -12,19 +12,19 @@ var Sequelize = require('sequelize');
 // });
 const CONFIG = {
     ethereum:{
-        rpc:"http://localhost:8545"
+        rpc:"http://192.168.1.10:8545"
     },
     Api:{
         uploadProgress:{
-            port:8101,
-            hostname:"192.168.1.210",
+            // port:8101,
+            // hostname:"bitop.io",
             method:"POST",
             path:"/hkico/project/pay",
             timeout: 300000
         },
         createProject:{
-            port:8101,
-            hostname:"192.168.1.210",
+            // port:8101,
+            // hostname:"bitop.io",
             method:"POST",
             path:"/hkico/project/buildContract",
             timeout: 300000
