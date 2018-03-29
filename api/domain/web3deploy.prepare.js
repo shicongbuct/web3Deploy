@@ -17,14 +17,14 @@ const CONFIG = {
     Api:{
         uploadProgress:{
             // port:8101,
-            // hostname:"bitop.io",
+            hostname:"bitop.io",
             method:"POST",
             path:"/hkico/project/pay",
             timeout: 300000
         },
         createProject:{
             // port:8101,
-            // hostname:"bitop.io",
+            hostname:"bitop.io",
             method:"POST",
             path:"/hkico/project/buildContract",
             timeout: 300000
