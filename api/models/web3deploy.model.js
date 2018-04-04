@@ -44,6 +44,7 @@ Web3deployModel.web3deploy  = function web3deploy(body){
                   isSuccess:false,
                   message:e
                 });
+                return;
               }
               console.log("合约生成中 address:" + contract.address ? '': contract.address);
               console.log("transactionHash:"+contract.transactionHash);
