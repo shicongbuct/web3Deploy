@@ -45,7 +45,7 @@ Web3deployModel.web3deploy  = function web3deploy(body){
                   message:e
                 });
               }
-              console.log("合约生成中 address:"+contract.address);
+              console.log("合约生成中 address:" + contract.address ? '': contract.address);
               console.log("transactionHash:"+contract.transactionHash);
               if (contract.address && typeof contract.address !== 'undefined') {
                   console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
