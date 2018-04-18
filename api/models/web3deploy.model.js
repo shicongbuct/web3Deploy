@@ -6,7 +6,7 @@ const http = require("https");
 const listenerController = require("../controllers/listener_controller");
 const util = require('../models/util')
 var rpcWeb3 = new Web3(new Web3.providers.HttpProvider(CONFIG.ethereum.rpc));
-var gasPrice = util.gasPrice;
+var gasPrice = util.deployGasPrice;
 var  Web3deployModel = module.exports;
 
 Web3deployModel.web3deploy  = function web3deploy(body){
