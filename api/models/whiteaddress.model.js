@@ -22,7 +22,8 @@ WhiteAddressModel.addWhiteAddress  = function addWhiteAddress(body){
 
       let locked = rpcWeb3.personal.unlockAccount(rpcWeb3.eth.accounts[0],"123456789");
       if(locked){
-          myContractInstance.addWhiteAddress(addAddress,{from: rpcWeb3.eth.accounts[0]},function(err, result){
+          myContractInstance.addWhiteAddress(addAddress,{from: rpcWeb3.eth.accounts[0],
+            gasPrice:10 },function(err, result){
             if(err){
               resolve({
                 isSuccess:false,
