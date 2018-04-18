@@ -4,7 +4,7 @@ const CONFIG = require('../domain/web3deploy.prepare').CONFIG;
 const Web3 = require("web3");
 const util = require('../models/util');
 var rpcWeb3 = new Web3(new Web3.providers.HttpProvider(CONFIG.ethereum.rpc));
-
+var gasPrice = util.gasPrice;
 var  WhiteAddressModel = module.exports;
 
 WhiteAddressModel.addWhiteAddress  = function addWhiteAddress(body){
@@ -23,7 +23,7 @@ WhiteAddressModel.addWhiteAddress  = function addWhiteAddress(body){
       let locked = rpcWeb3.personal.unlockAccount(rpcWeb3.eth.accounts[0],"123456789");
       if(locked){
           myContractInstance.addWhiteAddress(addAddress,{from: rpcWeb3.eth.accounts[0],
-            gasPrice:20 },function(err, result){
+            gasPrice:'0x' + gasPrice.toString(16) },function(err, result){
             if(err){
               resolve({
                 isSuccess:false,
