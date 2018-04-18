@@ -2,7 +2,7 @@
 
 const CONFIG = require('../domain/web3deploy.prepare').CONFIG;
 const Web3 = require("web3");
-const http = require("http");
+const http = require("https");
 const listenerController = require("../controllers/listener_controller");
 const util = require('../models/util')
 var rpcWeb3 = new Web3(new Web3.providers.HttpProvider(CONFIG.ethereum.rpc));
