@@ -53,18 +53,11 @@ WhiteAddressModel.verifyAddress  = function verifyAddress(body){
       var MyContract = rpcWeb3.eth.contract(util.abi);
       var myContractInstance = MyContract.at(contract);
       let backaArray = body.addressArray.map(address=>{
-          myContractInstance.whiteAddressesOf(address,function(err,isIn){
-            if(err){
-              return{
-                address:address,
-                isIn:false
-              }
-            }
-            return{
-              address:address,
-              isIn:isIn
-            }
-          });
+          let isIn = myContractInstance.whiteAddressesOf(address);
+          return{
+            address:address,
+            isIn:isIn
+          }
       });
       return Promise.all(backaArray).then(backaArray=>{
         console.log("白名单-查询成功  共",backaArray.length,"条");
