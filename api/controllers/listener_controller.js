@@ -67,21 +67,60 @@ ControllerListener.startListener = function startListener() {
     });
 }
 
-//添加 监听
+//  手动 添加 监听
 ControllerListener.addListener = function addListener(req,res) {
-    if(req.body.contract){
-        let addcontract = req.body.contract;
-        ControllerListener.addContractListener(addcontract).then(data=>{
-            res.status(200);
-            res.json(data);
-        });
-    }else{
-        res.status(200);
-        res.json({
-            isSuccess:false,
-            message:"缺少合约参数"
-          });
-    }
+        let contract = req.body.contract;
+        let projectId = req.body.projectId;
+        let password = req.body.password;
+        if(!password  ||  !contract || !projectId || password != 'OABD#*1K-'){
+            res.status(401);
+            res.json({
+                message:"缺少参数/密码错误"
+            });
+            return;
+        }
+        ControllerListener.addContractListener(contract).then(data=>{
+            return new Promise((resolve, reject) => {
+                var parm = {
+                    contract:contract,
+                    projectId:projectId
+                };
+                let write = parm;
+                let option = Object.assign({}, CONFIG.Api.uploadToBitop);
+                option.headers= {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(JSON.stringify(write))
+                };
+                var req = http.request(option, (res) =>{
+                        var data = "";
+                        res.setEncoding("utf8");
+                        res.on("data", (chunk) => {
+                            data += chunk;
+                        });
+                        res.on("end", () => {
+                            resolve(data);
+                        });
+                });
+                req.on('error', (e) => {
+                    resolve("上传失败:"+JSON.stringify(write));
+                });
+                req.write(JSON.stringify(write));
+                req.end();
+            }).catch(error=>{
+                res.status(500);
+                res.json({
+                    message:"提交至bitop出现错误"
+                });
+            }).then((data)=>{
+                res.status(200);
+                res.json(data);
+            });
+        }).catch(error=>{
+            res.status(500);
+            res.json({
+                message:"添加合约出现错误"
+            });
+        });;
 };
 
 ControllerListener.addContractListener  = function addContractListener(contract){

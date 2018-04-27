@@ -28,6 +28,12 @@ const CONFIG = {
             method:"POST",
             path:"/hkico/project/buildContract",
             timeout: 300000
+        },
+        uploadToBitop:{
+            hostname:"bitop.io",
+            method:"POST",
+            path:"/hkico/project/buildContract",
+            timeout: 300000
         }
     }
 }
