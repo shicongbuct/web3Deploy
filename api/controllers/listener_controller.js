@@ -159,6 +159,7 @@ ControllerListener.addContractListener  = function addContractListener(contract)
                 return new Promise((resolve, reject) => {
                     var parm = transactiondate.args;
                     parm.contract = contract;
+                    parm.transactionHash = transactiondate.transactionHash;
                     let write = parm;
                     let option = Object.assign({}, CONFIG.Api.uploadProgress);
                     option.headers= {
