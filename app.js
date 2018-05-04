@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/hkico/nodes/token/contract/deploy', ControllerWeb3deploy.web3deploy);//部署合约
 app.post('/hkico/nodes/token/contract/addlistener', ControllerListener.addListener);//添加监听
 app.post('/hkico/nodes/token/contract/addwhite/address', ControllerWhiteAddress.addWhiteAddress);//添加白名单
-app.post('/hkico/nodes/token/contract/whiteaddress/verify', ControllerWhiteAddress.verifyAddress);//添加白名单
+app.post('/hkico/nodes/token/contract/whiteaddress/verify', ControllerWhiteAddress.verifyAddress);//验证白名单s
 var port = process.env.PORT || 8108;
 app.listen(port);
 console.log(`listen the port: ${port}`);
