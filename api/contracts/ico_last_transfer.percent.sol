@@ -25,6 +25,7 @@ contract Crowdsale is Owner{
     uint256 public amountRaised;   // 参与数量
     uint256 public deadline;      // 募资截止期
     uint256 public minAmount = 0.01 ether; //最小数量
+    uint256 public maxAmount = 100000 ether; //最大数量
     uint256 public price;    //  token 与以太坊的汇率 , token卖多少钱
     token public tokenReward;   // 要卖的token
     mapping(address => uint256) public balanceOf;
@@ -67,7 +68,7 @@ contract Crowdsale is Owner{
         require(now < deadline);//日期限制
         require(whiteAddressesOf[msg.sender]);//白名单
         uint256 amount = msg.value;
-        require(amount >= minAmount && (amountRaised + amount) <= fundingGoal);   //数量大于最小数，总数小于募集总数
+        require(amount >= minAmount && amount <= maxAmount && (amountRaised + amount) <= fundingGoal);   //数量大于最小数，总数小于募集总数
         balanceOf[msg.sender] += amount;
         amountRaised += amount;
         transferEvent(fundingGoal,amountRaised,msg.sender,amount);
@@ -214,6 +215,14 @@ contract Crowdsale is Owner{
         }else{
             revert(); 
         }
+    }
+
+    function setMaxAmount(uint256 max_amount) onlyOwner public{
+        maxAmount = max_amount;
+    }
+
+    function setMinAmount(uint256 min_amount) onlyOwner public{
+        minAmount = min_amount;
     }
 
     /**
