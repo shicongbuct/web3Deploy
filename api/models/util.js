@@ -139,8 +139,8 @@ util.findfile = function findfile(fileName,myfilePath){
     finder(myfilePath);
     return file;
 };
-util.deployGasPrice = 16000000000;
-util.gasPrice = 28000000000;
+util.deployGasPrice = 10000000000;
+util.gasPrice = 18000000000;
 util.abi = [
 	{
 		"constant": false,
